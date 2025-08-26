@@ -1,0 +1,13 @@
+trimestre,kpi_nome,kpi_valor,kpi_meta,kpi_atingimento,kpi_flag
+2025-T1,Receita de Venda,35093000,31583700,90,https://raw.githubusercontent.com/lcpassuncao/public/refs/heads/main/images/dash_icon_green.png
+2025-T1,Resultado Bruto,5750000,5117500,89,https://raw.githubusercontent.com/lcpassuncao/public/refs/heads/main/images/dash_icon_yellow.png
+2025-T1,Resultado de Equivalência Patrimonial,32,30,95,https://raw.githubusercontent.com/lcpassuncao/public/refs/heads/main/images/dash_icon_green.png
+2025-T1,Resultado Financeiro,50000,30000,60,https://raw.githubusercontent.com/lcpassuncao/public/refs/heads/main/images/dash_icon_red.png
+2025-T1,Resultado Líquido das Operações Continuadas,183,146,80,https://raw.githubusercontent.com/lcpassuncao/public/refs/heads/main/images/dash_icon_yellow.png
+2025-T1,Lucro (Prejuízo) do Período,183,146,80,https://raw.githubusercontent.com/lcpassuncao/public/refs/heads/main/images/dash_icon_up.png
+2025-T2,Receita de Venda,37554000,35300760,94,https://raw.githubusercontent.com/lcpassuncao/public/refs/heads/main/images/dash_icon_green.png
+2025-T2,Resultado Bruto,6245000,5433150,87,https://raw.githubusercontent.com/lcpassuncao/public/refs/heads/main/images/dash_icon_yellow.png
+2025-T2,Resultado de Equivalência Patrimonial,36,34,95,https://raw.githubusercontent.com/lcpassuncao/public/refs/heads/main/images/dash_icon_green.png
+2025-T2,Resultado Financeiro,5000,2500,50,https://raw.githubusercontent.com/lcpassuncao/public/refs/heads/main/images/dash_icon_red.png
+2025-T2,Resultado Líquido das Operações Continuadas,336,269,80,https://raw.githubusercontent.com/lcpassuncao/public/refs/heads/main/images/dash_icon_yellow.png
+2025-T2,Lucro (Prejuízo) do Período,336,252,75,https://raw.githubusercontent.com/lcpassuncao/public/refs/heads/main/images/dash_icon_down.png
