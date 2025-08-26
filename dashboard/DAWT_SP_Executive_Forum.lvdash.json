@@ -95,6 +95,20 @@
         "  FROM\n",
         "    dates"
       ]
+    },
+    {
+      "name": "3238effc",
+      "displayName": "dre",
+      "queryLines": [
+        "SELECT * FROM luis_assuncao.handson.dre"
+      ]
+    },
+    {
+      "name": "69ca7770",
+      "displayName": "noticias_do_dolar",
+      "queryLines": [
+        "SELECT * FROM luis_assuncao.handson.noticias_do_dolar"
+      ]
     }
   ],
   "pages": [
@@ -121,12 +135,44 @@
         },
         {
           "widget": {
-            "name": "table1",
+            "name": "291b6c68",
+            "multilineTextboxSpec": {
+              "lines": [
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_lateral1.png)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 1,
+            "height": 12
+          }
+        },
+        {
+          "widget": {
+            "name": "621b6965",
+            "multilineTextboxSpec": {
+              "lines": [
+                "Copyright (c) Databricks, 2025. "
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "202a0b89",
             "queries": [
               {
                 "name": "main_query",
                 "query": {
-                  "datasetName": "dataset1",
+                  "datasetName": "3238effc",
                   "fields": [
                     {
                       "name": "kpi_nome",
@@ -137,12 +183,16 @@
                       "expression": "`kpi_valor`"
                     },
                     {
-                      "name": "kpi_flag",
-                      "expression": "`kpi_flag`"
+                      "name": "kpi_meta",
+                      "expression": "`kpi_meta`"
                     },
                     {
                       "name": "kpi_atingimento",
                       "expression": "`kpi_atingimento`"
+                    },
+                    {
+                      "name": "kpi_flag",
+                      "expression": "`kpi_flag`"
                     }
                   ],
                   "disaggregated": true
@@ -171,8 +221,8 @@
                     "type": "string",
                     "displayAs": "string",
                     "visible": true,
-                    "order": 1,
-                    "title": "Nome do Indicador (KPI)",
+                    "order": 100001,
+                    "title": "INDICADOR FINANCEIRO",
                     "allowSearch": false,
                     "alignContent": "left",
                     "allowHTML": false,
@@ -183,7 +233,7 @@
                   },
                   {
                     "fieldName": "kpi_valor",
-                    "numberFormat": "0.00",
+                    "numberFormat": "(0,)",
                     "booleanValues": [
                       "false",
                       "true"
@@ -196,47 +246,55 @@
                     "linkTextTemplate": "{{ @ }}",
                     "linkTitleTemplate": "{{ @ }}",
                     "linkOpenInNewTab": true,
-                    "type": "float",
+                    "type": "integer",
                     "displayAs": "number",
                     "visible": true,
-                    "order": 3,
-                    "title": "Realizado",
+                    "order": 100002,
+                    "title": "VALOR TRIMESTRE",
                     "allowSearch": false,
-                    "alignContent": "center",
+                    "alignContent": "right",
                     "allowHTML": false,
                     "highlightLinks": false,
                     "useMonospaceFont": false,
                     "preserveWhitespace": false,
-                    "defaultColumnWidth": 90,
                     "displayName": "kpi_valor"
                   },
                   {
-                    "fieldName": "kpi_flag",
+                    "fieldName": "kpi_meta",
+                    "numberFormat": "0,0",
                     "booleanValues": [
                       "false",
                       "true"
                     ],
                     "imageUrlTemplate": "{{ @ }}",
                     "imageTitleTemplate": "{{ @ }}",
-                    "imageWidth": "18",
-                    "imageHeight": "18",
+                    "imageWidth": "",
+                    "imageHeight": "",
                     "linkUrlTemplate": "{{ @ }}",
                     "linkTextTemplate": "{{ @ }}",
                     "linkTitleTemplate": "{{ @ }}",
                     "linkOpenInNewTab": true,
-                    "type": "string",
-                    "displayAs": "image",
+                    "type": "integer",
+                    "displayAs": "number",
                     "visible": true,
-                    "order": 5,
-                    "title": "#",
+                    "order": 100003,
+                    "title": "META",
                     "allowSearch": false,
-                    "alignContent": "left",
+                    "alignContent": "right",
                     "allowHTML": false,
                     "highlightLinks": false,
                     "useMonospaceFont": false,
                     "preserveWhitespace": false,
-                    "defaultColumnWidth": 50,
-                    "displayName": "kpi_flag"
+                    "cellFormat": {
+                      "default": {
+                        "foregroundColor": {
+                          "themeColorType": "visualizationColors",
+                          "position": 5
+                        }
+                      },
+                      "rules": []
+                    },
+                    "displayName": "kpi_meta"
                   },
                   {
                     "fieldName": "kpi_atingimento",
@@ -253,27 +311,46 @@
                     "linkTextTemplate": "{{ @ }}",
                     "linkTitleTemplate": "{{ @ }}",
                     "linkOpenInNewTab": true,
-                    "type": "float",
+                    "type": "integer",
                     "displayAs": "number",
                     "visible": true,
-                    "order": 6,
-                    "title": "%Ating.",
+                    "order": 100004,
+                    "title": "%ATINGIMENTO",
                     "allowSearch": false,
                     "alignContent": "center",
                     "allowHTML": false,
                     "highlightLinks": false,
                     "useMonospaceFont": false,
                     "preserveWhitespace": false,
-                    "cellFormat": {
-                      "default": {
-                        "foregroundColor": {
-                          "themeColorType": "selectionColor"
-                        }
-                      },
-                      "rules": []
-                    },
-                    "defaultColumnWidth": 90,
                     "displayName": "kpi_atingimento"
+                  },
+                  {
+                    "fieldName": "kpi_flag",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "20",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "image",
+                    "visible": true,
+                    "order": 100005,
+                    "title": "FLAG",
+                    "allowSearch": false,
+                    "alignContent": "center",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "defaultColumnWidth": 80,
+                    "displayName": "kpi_flag"
                   }
                 ]
               },
@@ -291,65 +368,13 @@
                   "linkTextTemplate": "{{ @ }}",
                   "linkTitleTemplate": "{{ @ }}",
                   "linkOpenInNewTab": true,
-                  "name": "diretoria",
+                  "name": "trimestre",
                   "type": "string",
                   "displayAs": "string",
-                  "order": 0,
-                  "title": "diretoria",
+                  "order": 100000,
+                  "title": "trimestre",
                   "allowSearch": false,
                   "alignContent": "left",
-                  "allowHTML": false,
-                  "highlightLinks": false,
-                  "useMonospaceFont": false,
-                  "preserveWhitespace": false
-                },
-                {
-                  "dateTimeFormat": "YYYY-MM-DD",
-                  "booleanValues": [
-                    "false",
-                    "true"
-                  ],
-                  "imageUrlTemplate": "{{ @ }}",
-                  "imageTitleTemplate": "{{ @ }}",
-                  "imageWidth": "",
-                  "imageHeight": "",
-                  "linkUrlTemplate": "{{ @ }}",
-                  "linkTextTemplate": "{{ @ }}",
-                  "linkTitleTemplate": "{{ @ }}",
-                  "linkOpenInNewTab": true,
-                  "name": "ano_mes",
-                  "type": "date",
-                  "displayAs": "datetime",
-                  "order": 2,
-                  "title": "ano_mes",
-                  "allowSearch": false,
-                  "alignContent": "right",
-                  "allowHTML": false,
-                  "highlightLinks": false,
-                  "useMonospaceFont": false,
-                  "preserveWhitespace": false
-                },
-                {
-                  "numberFormat": "0",
-                  "booleanValues": [
-                    "false",
-                    "true"
-                  ],
-                  "imageUrlTemplate": "{{ @ }}",
-                  "imageTitleTemplate": "{{ @ }}",
-                  "imageWidth": "",
-                  "imageHeight": "",
-                  "linkUrlTemplate": "{{ @ }}",
-                  "linkTextTemplate": "{{ @ }}",
-                  "linkTitleTemplate": "{{ @ }}",
-                  "linkOpenInNewTab": true,
-                  "name": "kpi_meta",
-                  "type": "integer",
-                  "displayAs": "number",
-                  "order": 4,
-                  "title": "kpi_meta",
-                  "allowSearch": false,
-                  "alignContent": "right",
                   "allowHTML": false,
                   "highlightLinks": false,
                   "useMonospaceFont": false,
@@ -357,7 +382,7 @@
                 }
               ],
               "allowHTMLByDefault": false,
-              "itemsPerPage": 50,
+              "itemsPerPage": 25,
               "paginationSize": "default",
               "condensed": true,
               "withRowNumber": false
@@ -365,72 +390,42 @@
           },
           "position": {
             "x": 1,
-            "y": 3,
+            "y": 4,
             "width": 5,
-            "height": 11
+            "height": 10
           }
         },
         {
           "widget": {
-            "name": "d829ec43",
-            "queries": [
-              {
-                "name": "dashboards/01f068c469ce14e3aa8ed1a4f5de1570/datasets/01f068c469ce1cdd89a77ea2a013422b_diretoria",
-                "query": {
-                  "datasetName": "dataset1",
-                  "fields": [
-                    {
-                      "name": "diretoria",
-                      "expression": "`diretoria`"
-                    },
-                    {
-                      "name": "diretoria_associativity",
-                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "version": 2,
-              "widgetType": "filter-single-select",
-              "encodings": {
-                "fields": [
-                  {
-                    "fieldName": "diretoria",
-                    "displayName": "diretoria",
-                    "queryName": "dashboards/01f068c469ce14e3aa8ed1a4f5de1570/datasets/01f068c469ce1cdd89a77ea2a013422b_diretoria"
-                  }
-                ]
-              },
-              "frame": {
-                "showTitle": true
-              }
+            "name": "e693d775",
+            "multilineTextboxSpec": {
+              "lines": [
+                "### DRE - DEMONSTRATIVO DO RESULTADO EXERCÍCIO"
+              ]
             }
           },
           "position": {
-            "x": 3,
+            "x": 1,
             "y": 2,
             "width": 3,
-            "height": 1
+            "height": 2
           }
         },
         {
           "widget": {
-            "name": "b0be662c",
+            "name": "42801289",
             "queries": [
               {
-                "name": "dashboards/01f068c469ce14e3aa8ed1a4f5de1570/datasets/01f068c469ce1cdd89a77ea2a013422b_ano_mes",
+                "name": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f082871bad17b3ae0766bf86621c77_trimestre",
                 "query": {
-                  "datasetName": "dataset1",
+                  "datasetName": "3238effc",
                   "fields": [
                     {
-                      "name": "ano_mes",
-                      "expression": "`ano_mes`"
+                      "name": "trimestre",
+                      "expression": "`trimestre`"
                     },
                     {
-                      "name": "ano_mes_associativity",
+                      "name": "trimestre_associativity",
                       "expression": "COUNT_IF(`associative_filter_predicate_group`)"
                     }
                   ],
@@ -444,53 +439,34 @@
               "encodings": {
                 "fields": [
                   {
-                    "fieldName": "ano_mes",
-                    "displayName": "ano_mes",
-                    "queryName": "dashboards/01f068c469ce14e3aa8ed1a4f5de1570/datasets/01f068c469ce1cdd89a77ea2a013422b_ano_mes"
+                    "fieldName": "trimestre",
+                    "displayName": "trimestre",
+                    "queryName": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f082871bad17b3ae0766bf86621c77_trimestre"
                   }
                 ]
               },
               "frame": {
                 "showTitle": true
-              }
+              },
+              "selection": {
+                "defaultSelection": {
+                  "values": {
+                    "dataType": "STRING",
+                    "values": [
+                      {
+                        "value": "2025-T1"
+                      }
+                    ]
+                  }
+                }
+              },
+              "disallowAll": true
             }
           },
           "position": {
-            "x": 1,
+            "x": 4,
             "y": 2,
             "width": 2,
-            "height": 1
-          }
-        },
-        {
-          "widget": {
-            "name": "291b6c68",
-            "multilineTextboxSpec": {
-              "lines": [
-                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_lateral1.png)"
-              ]
-            }
-          },
-          "position": {
-            "x": 0,
-            "y": 2,
-            "width": 1,
-            "height": 12
-          }
-        },
-        {
-          "widget": {
-            "name": "621b6965",
-            "multilineTextboxSpec": {
-              "lines": [
-                "Databricks 2025"
-              ]
-            }
-          },
-          "position": {
-            "x": 1,
-            "y": 14,
-            "width": 5,
             "height": 2
           }
         }
@@ -539,14 +515,14 @@
             "name": "2f26aa2c",
             "multilineTextboxSpec": {
               "lines": [
-                "Databricks 2025"
+                "Copyright (c) Databricks, 2025."
               ]
             }
           },
           "position": {
-            "x": 1,
+            "x": 0,
             "y": 14,
-            "width": 5,
+            "width": 6,
             "height": 2
           }
         },
@@ -752,14 +728,14 @@
             "name": "0b7b4225",
             "multilineTextboxSpec": {
               "lines": [
-                "Databricks 2025"
+                "Copyright (c) Databricks, 2025.\n"
               ]
             }
           },
           "position": {
-            "x": 1,
+            "x": 0,
             "y": 14,
-            "width": 5,
+            "width": 6,
             "height": 2
           }
         },
@@ -1395,7 +1371,7 @@
             "multilineTextboxSpec": {
               "lines": [
                 "\n",
-                "![image](https://raw.githubusercontent.com/Databricks-BR/Databricks-BR/refs/heads/main/images/head_spwt2.png)"
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_head2.png)"
               ]
             }
           },
@@ -1427,14 +1403,14 @@
             "name": "a250f872",
             "multilineTextboxSpec": {
               "lines": [
-                "Databricks 2025"
+                "DCopyright (c) Databricks, 2025.\n"
               ]
             }
           },
           "position": {
             "x": 0,
             "y": 14,
-            "width": 5,
+            "width": 6,
             "height": 2
           }
         },
@@ -1615,6 +1591,105 @@
             "width": 5,
             "height": 11
           }
+        },
+        {
+          "widget": {
+            "name": "4c5fa17c",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "69ca7770",
+                  "fields": [
+                    {
+                      "name": "data",
+                      "expression": "`data`"
+                    },
+                    {
+                      "name": "noticia_acontecimento_dolar",
+                      "expression": "`noticia_acontecimento_dolar`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "data",
+                    "dateTimeFormat": "DD/MM/YYYY",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "date",
+                    "displayAs": "datetime",
+                    "visible": true,
+                    "order": 100000,
+                    "title": "data",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "data"
+                  },
+                  {
+                    "fieldName": "noticia_acontecimento_dolar",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100001,
+                    "title": "noticia_acontecimento_dolar",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "noticia_acontecimento_dolar"
+                  }
+                ]
+              },
+              "invisibleColumns": [],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 25,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": false
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 16,
+            "width": 6,
+            "height": 4
+          }
         }
       ],
       "pageType": "PAGE_TYPE_CANVAS"
@@ -1661,14 +1736,14 @@
             "name": "d3df85e6",
             "multilineTextboxSpec": {
               "lines": [
-                "Databricks 2025"
+                "Copyright (c) Databricks, 2025."
               ]
             }
           },
           "position": {
-            "x": 1,
+            "x": 0,
             "y": 14,
-            "width": 5,
+            "width": 6,
             "height": 2
           }
         },
