@@ -840,7 +840,7 @@
                     "displayAs": "string",
                     "visible": true,
                     "order": 3,
-                    "title": "Empresa",
+                    "title": "EMPRESA",
                     "allowSearch": false,
                     "alignContent": "left",
                     "allowHTML": false,
@@ -858,7 +858,7 @@
                   },
                   {
                     "fieldName": "lucro_bruto",
-                    "numberFormat": "'0'",
+                    "numberFormat": "'0,0",
                     "booleanValues": [
                       "false",
                       "true"
@@ -875,7 +875,7 @@
                     "displayAs": "number",
                     "visible": true,
                     "order": 5,
-                    "title": "Lucro",
+                    "title": "LUCRO 2024",
                     "allowSearch": false,
                     "alignContent": "right",
                     "allowHTML": false,
@@ -905,7 +905,7 @@
                     "order": 6,
                     "title": "P / L",
                     "allowSearch": false,
-                    "alignContent": "right",
+                    "alignContent": "center",
                     "allowHTML": false,
                     "highlightLinks": false,
                     "useMonospaceFont": false,
@@ -934,7 +934,7 @@
                     "order": 7,
                     "title": "P / VP",
                     "allowSearch": false,
-                    "alignContent": "right",
+                    "alignContent": "center",
                     "allowHTML": false,
                     "highlightLinks": false,
                     "useMonospaceFont": false,
@@ -962,9 +962,9 @@
                     "displayAs": "number",
                     "visible": true,
                     "order": 8,
-                    "title": "valor_preco_ativo",
+                    "title": "COTAÇÃO",
                     "allowSearch": false,
-                    "alignContent": "right",
+                    "alignContent": "center",
                     "allowHTML": false,
                     "highlightLinks": false,
                     "useMonospaceFont": false,
@@ -973,7 +973,7 @@
                   },
                   {
                     "fieldName": "return_on_equity",
-                    "numberFormat": "0.00",
+                    "numberFormat": "0.00%",
                     "booleanValues": [
                       "false",
                       "true"
@@ -990,9 +990,9 @@
                     "displayAs": "number",
                     "visible": true,
                     "order": 9,
-                    "title": "return_on_equity",
+                    "title": "ROE",
                     "allowSearch": false,
-                    "alignContent": "right",
+                    "alignContent": "center",
                     "allowHTML": false,
                     "highlightLinks": false,
                     "useMonospaceFont": false,
@@ -1001,7 +1001,7 @@
                   },
                   {
                     "fieldName": "margem_liquida",
-                    "numberFormat": "0.00",
+                    "numberFormat": "0.00%",
                     "booleanValues": [
                       "false",
                       "true"
@@ -1018,9 +1018,9 @@
                     "displayAs": "number",
                     "visible": true,
                     "order": 10,
-                    "title": "margem_liquida",
+                    "title": "MARGEM LIQ",
                     "allowSearch": false,
-                    "alignContent": "right",
+                    "alignContent": "center",
                     "allowHTML": false,
                     "highlightLinks": false,
                     "useMonospaceFont": false,
@@ -1029,7 +1029,7 @@
                   },
                   {
                     "fieldName": "valuation",
-                    "numberFormat": "0",
+                    "numberFormat": "0,0",
                     "booleanValues": [
                       "false",
                       "true"
@@ -1046,7 +1046,7 @@
                     "displayAs": "number",
                     "visible": true,
                     "order": 11,
-                    "title": "valuation",
+                    "title": "VALUATION",
                     "allowSearch": false,
                     "alignContent": "right",
                     "allowHTML": false,
@@ -1403,7 +1403,7 @@
             "name": "a250f872",
             "multilineTextboxSpec": {
               "lines": [
-                "DCopyright (c) Databricks, 2025.\n"
+                "Copyright (c) Databricks, 2025.\n"
               ]
             }
           },
@@ -1938,6 +1938,321 @@
             "y": 2,
             "width": 3,
             "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "16271c9c",
+      "displayName": "Histórico Dólar",
+      "layout": [
+        {
+          "widget": {
+            "name": "aff08883",
+            "multilineTextboxSpec": {
+              "lines": [
+                "\n",
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_head2.png)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "62cb8546",
+            "multilineTextboxSpec": {
+              "lines": [
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_lateral2.png)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 1,
+            "height": 12
+          }
+        },
+        {
+          "widget": {
+            "name": "7a044107",
+            "multilineTextboxSpec": {
+              "lines": [
+                "Copyright (c) Databricks, 2025.\n"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "150cb9c5",
+            "queries": [
+              {
+                "name": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f081235b8612ff97dd5e71a7ae87f1_ano",
+                "query": {
+                  "datasetName": "6a054a5c",
+                  "fields": [
+                    {
+                      "name": "ano",
+                      "expression": "`ano`"
+                    },
+                    {
+                      "name": "ano_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "ano",
+                    "displayName": "ano",
+                    "queryName": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f081235b8612ff97dd5e71a7ae87f1_ano"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "c26774a1",
+            "multilineTextboxSpec": {
+              "lines": [
+                "### HISTÓRICO DIÁRIO DA COTAÇÃO DO DÓLAR"
+              ]
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 2,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "f6940788",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "69ca7770",
+                  "fields": [
+                    {
+                      "name": "data",
+                      "expression": "`data`"
+                    },
+                    {
+                      "name": "noticia_acontecimento_dolar",
+                      "expression": "`noticia_acontecimento_dolar`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "data",
+                    "dateTimeFormat": "DD/MM/YYYY",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "date",
+                    "displayAs": "datetime",
+                    "visible": true,
+                    "order": 100000,
+                    "title": "data",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "data"
+                  },
+                  {
+                    "fieldName": "noticia_acontecimento_dolar",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100001,
+                    "title": "noticia_acontecimento_dolar",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "noticia_acontecimento_dolar"
+                  }
+                ]
+              },
+              "invisibleColumns": [],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 25,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": false
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 16,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "df1b50a9",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "6a054a5c",
+                  "fields": [
+                    {
+                      "name": "monthly(data)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `data`)"
+                    },
+                    {
+                      "name": "avg(val_dolar_fechamento)",
+                      "expression": "AVG(`val_dolar_fechamento`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(data)",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "data"
+                },
+                "y": {
+                  "fieldName": "avg(val_dolar_fechamento)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Average val_dolar_fechamento"
+                }
+              },
+              "frame": {
+                "title": "Valor médio mensal do fechamento do dólar",
+                "showTitle": true
+              },
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 3,
+            "width": 5,
+            "height": 8
           }
         }
       ],
