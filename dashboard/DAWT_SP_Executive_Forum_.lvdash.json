@@ -1,0 +1,1968 @@
+{
+  "datasets": [
+    {
+      "name": "dataset1",
+      "displayName": "kpi",
+      "queryLines": [
+        "SELECT * FROM sabesp.veritas.kpi"
+      ]
+    },
+    {
+      "name": "18c2e583",
+      "displayName": "empresas_sp",
+      "queryLines": [
+        "SELECT * FROM workshop_08_2025.inadimplencia.empresas_sp"
+      ]
+    },
+    {
+      "name": "52202811",
+      "displayName": "inadimplencia",
+      "queryLines": [
+        "SELECT * FROM sabesp.clientes.inadimplencia"
+      ]
+    },
+    {
+      "name": "6a054a5c",
+      "displayName": "hist_dolar",
+      "queryLines": [
+        "SELECT * FROM luis_assuncao.handson.hist_dolar"
+      ]
+    },
+    {
+      "name": "84b0f875",
+      "displayName": "empresas_b_3",
+      "queryLines": [
+        "SELECT \n",
+        "concat(\"https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/logo_empresas/\", logo_empresa) as link,\n",
+        " * FROM luis_assuncao.handson.empresas_b_3"
+      ]
+    },
+    {
+      "name": "42b4e325",
+      "displayName": "hist_dolar (Forecasted)",
+      "queryLines": [
+        "WITH original_table AS (\n",
+        "    SELECT \n",
+        "  DATE_TRUNC(\"DAY\", `data`) AS data,\n",
+        "  AVG(`val_dolar_fechamento`) AS val_dolar_fechamento\n",
+        "FROM (\n",
+        "    SELECT * FROM luis_assuncao.handson.hist_dolar\n",
+        ") GROUP BY 1\n",
+        "  ),\n",
+        "  dates AS (\n",
+        "    SELECT \n",
+        "      MAX(data) AS max_date_column,\n",
+        "      MIN(data) AS min_date_column,\n",
+        "      MAX_BY(val_dolar_fechamento, data) AS val_dolar_fechamento\n",
+        "    FROM original_table\n",
+        "  ),\n",
+        "  forecast_table AS (\n",
+        "    SELECT \n",
+        "      data,\n",
+        "      val_dolar_fechamento_forecast,\n",
+        "      val_dolar_fechamento_upper,\n",
+        "      val_dolar_fechamento_lower,\n",
+        "      NULL AS val_dolar_fechamento\n",
+        "    FROM AI_FORECAST(\n",
+        "      TABLE(original_table),\n",
+        "      horizon => (\n",
+        "        SELECT\n",
+        "          max_date_column + MAKE_DT_INTERVAL(CAST(FLOOR(DATEDIFF(max_date_column, min_date_column) * 0.5) AS INT), 0, 0, 0)\n",
+        "        FROM dates\n",
+        "      ),\n",
+        "      time_col => 'data',\n",
+        "      value_col => 'val_dolar_fechamento'\n",
+        "    )\n",
+        "  )\n",
+        "\n",
+        "  SELECT * FROM forecast_table\n",
+        "  UNION ALL\n",
+        "  SELECT\n",
+        "    data,\n",
+        "    NULL AS val_dolar_fechamento_forecast,\n",
+        "    NULL AS val_dolar_fechamento_upper,\n",
+        "    NULL AS val_dolar_fechamento_lower,\n",
+        "    val_dolar_fechamento\n",
+        "  FROM original_table\n",
+        "    WHERE data < (SELECT max_date_column FROM dates)\n",
+        "  UNION ALL\n",
+        "  SELECT\n",
+        "    max_date_column AS data,\n",
+        "    val_dolar_fechamento AS val_dolar_fechamento_forecast,\n",
+        "    val_dolar_fechamento AS val_dolar_fechamento_upper,\n",
+        "    val_dolar_fechamento AS val_dolar_fechamento_lower,\n",
+        "    val_dolar_fechamento\n",
+        "  FROM\n",
+        "    dates"
+      ]
+    },
+    {
+      "name": "3238effc",
+      "displayName": "dre",
+      "queryLines": [
+        "SELECT * FROM luis_assuncao.handson.dre"
+      ]
+    },
+    {
+      "name": "69ca7770",
+      "displayName": "noticias_do_dolar",
+      "queryLines": [
+        "SELECT * FROM luis_assuncao.handson.noticias_do_dolar"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "page1",
+      "displayName": "Macro Indicadores",
+      "layout": [
+        {
+          "widget": {
+            "name": "text_box1",
+            "multilineTextboxSpec": {
+              "lines": [
+                "\n",
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_head2_w.png)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "291b6c68",
+            "multilineTextboxSpec": {
+              "lines": [
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_lateral1_w.png)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 1,
+            "height": 12
+          }
+        },
+        {
+          "widget": {
+            "name": "621b6965",
+            "multilineTextboxSpec": {
+              "lines": [
+                "Copyright (c) Databricks, 2025. "
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "202a0b89",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3238effc",
+                  "fields": [
+                    {
+                      "name": "kpi_nome",
+                      "expression": "`kpi_nome`"
+                    },
+                    {
+                      "name": "kpi_valor",
+                      "expression": "`kpi_valor`"
+                    },
+                    {
+                      "name": "kpi_meta",
+                      "expression": "`kpi_meta`"
+                    },
+                    {
+                      "name": "kpi_atingimento",
+                      "expression": "`kpi_atingimento`"
+                    },
+                    {
+                      "name": "kpi_flag",
+                      "expression": "`kpi_flag`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "kpi_nome",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100001,
+                    "title": "INDICADOR FINANCEIRO",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "kpi_nome"
+                  },
+                  {
+                    "fieldName": "kpi_valor",
+                    "numberFormat": "(0,)",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "integer",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 100002,
+                    "title": "VALOR TRIMESTRE",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "kpi_valor"
+                  },
+                  {
+                    "fieldName": "kpi_meta",
+                    "numberFormat": "0,0",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "integer",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 100003,
+                    "title": "META",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "cellFormat": {
+                      "default": {
+                        "foregroundColor": {
+                          "themeColorType": "visualizationColors",
+                          "position": 3
+                        }
+                      },
+                      "rules": []
+                    },
+                    "displayName": "kpi_meta"
+                  },
+                  {
+                    "fieldName": "kpi_atingimento",
+                    "numberFormat": "0.00",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "integer",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 100004,
+                    "title": "%ATINGIMENTO",
+                    "allowSearch": false,
+                    "alignContent": "center",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "kpi_atingimento"
+                  },
+                  {
+                    "fieldName": "kpi_flag",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "20",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "image",
+                    "visible": true,
+                    "order": 100005,
+                    "title": "FLAG",
+                    "allowSearch": false,
+                    "alignContent": "center",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "defaultColumnWidth": 80,
+                    "displayName": "kpi_flag"
+                  }
+                ]
+              },
+              "invisibleColumns": [
+                {
+                  "booleanValues": [
+                    "false",
+                    "true"
+                  ],
+                  "imageUrlTemplate": "{{ @ }}",
+                  "imageTitleTemplate": "{{ @ }}",
+                  "imageWidth": "",
+                  "imageHeight": "",
+                  "linkUrlTemplate": "{{ @ }}",
+                  "linkTextTemplate": "{{ @ }}",
+                  "linkTitleTemplate": "{{ @ }}",
+                  "linkOpenInNewTab": true,
+                  "name": "trimestre",
+                  "type": "string",
+                  "displayAs": "string",
+                  "order": 100000,
+                  "title": "trimestre",
+                  "allowSearch": false,
+                  "alignContent": "left",
+                  "allowHTML": false,
+                  "highlightLinks": false,
+                  "useMonospaceFont": false,
+                  "preserveWhitespace": false
+                }
+              ],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 25,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": false
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 4,
+            "width": 5,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "e693d775",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## DRE - DEMONSTRATIVO DO RESULTADO EXERCÍCIO"
+              ]
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "42801289",
+            "queries": [
+              {
+                "name": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f082871bad17b3ae0766bf86621c77_trimestre",
+                "query": {
+                  "datasetName": "3238effc",
+                  "fields": [
+                    {
+                      "name": "trimestre",
+                      "expression": "`trimestre`"
+                    },
+                    {
+                      "name": "trimestre_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "trimestre",
+                    "displayName": "trimestre",
+                    "queryName": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f082871bad17b3ae0766bf86621c77_trimestre"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              },
+              "selection": {
+                "defaultSelection": {
+                  "values": {
+                    "dataType": "STRING",
+                    "values": [
+                      {
+                        "value": "2025-T1"
+                      }
+                    ]
+                  }
+                }
+              },
+              "disallowAll": true
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 2,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "f9e83a36",
+      "displayName": "Geo Análise",
+      "layout": [
+        {
+          "widget": {
+            "name": "152a6726",
+            "multilineTextboxSpec": {
+              "lines": [
+                "\n",
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_head2_w.png)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "c585009e",
+            "multilineTextboxSpec": {
+              "lines": [
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_lateral4_w.png)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 1,
+            "height": 12
+          }
+        },
+        {
+          "widget": {
+            "name": "2f26aa2c",
+            "multilineTextboxSpec": {
+              "lines": [
+                "Copyright (c) Databricks, 2025."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "3df7bd83",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "18c2e583",
+                  "fields": [
+                    {
+                      "name": "bairro",
+                      "expression": "`bairro`"
+                    },
+                    {
+                      "name": "latitude",
+                      "expression": "`latitude`"
+                    },
+                    {
+                      "name": "longitude",
+                      "expression": "`longitude`"
+                    },
+                    {
+                      "name": "cnpj_txt",
+                      "expression": "`cnpj_txt`"
+                    },
+                    {
+                      "name": "nome_razao_social",
+                      "expression": "`nome_razao_social`"
+                    },
+                    {
+                      "name": "val_capital_social",
+                      "expression": "`val_capital_social`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "symbol-map",
+              "encodings": {
+                "coordinates": {
+                  "latitude": {
+                    "fieldName": "latitude",
+                    "displayName": "latitude"
+                  },
+                  "longitude": {
+                    "fieldName": "longitude",
+                    "displayName": "longitude"
+                  }
+                },
+                "color": {
+                  "fieldName": "bairro",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "legend": {
+                    "hideTitle": true,
+                    "hide": true
+                  },
+                  "displayName": "bairro"
+                },
+                "extra": [
+                  {
+                    "fieldName": "cnpj_txt",
+                    "displayName": "CNPJ"
+                  },
+                  {
+                    "fieldName": "nome_razao_social",
+                    "displayName": "EMPRESA"
+                  },
+                  {
+                    "fieldName": "bairro",
+                    "displayName": "bairro"
+                  },
+                  {
+                    "fieldName": "val_capital_social",
+                    "displayName": "Capital Social R$"
+                  }
+                ]
+              },
+              "mark": {
+                "size": -3,
+                "opacity": 0.55
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 3,
+            "width": 5,
+            "height": 11
+          }
+        },
+        {
+          "widget": {
+            "name": "584bc6b1",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## ANÁLISE GEORREFERENCIADA"
+              ]
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 2,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "3b0c1f24",
+            "queries": [
+              {
+                "name": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f07fd6d6bc151581600a154eee8555_bairro",
+                "query": {
+                  "datasetName": "18c2e583",
+                  "fields": [
+                    {
+                      "name": "bairro",
+                      "expression": "`bairro`"
+                    },
+                    {
+                      "name": "bairro_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "bairro",
+                    "displayName": "bairro",
+                    "queryName": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f07fd6d6bc151581600a154eee8555_bairro"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 2,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "c17adefb",
+      "displayName": "Mercado",
+      "layout": [
+        {
+          "widget": {
+            "name": "ac77e93c",
+            "multilineTextboxSpec": {
+              "lines": [
+                "\n",
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_head2_w.png)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "8f39827a",
+            "multilineTextboxSpec": {
+              "lines": [
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_lateral4_w.png)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 1,
+            "height": 12
+          }
+        },
+        {
+          "widget": {
+            "name": "0b7b4225",
+            "multilineTextboxSpec": {
+              "lines": [
+                "Copyright (c) Databricks, 2025.\n"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "9c92f24d",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "84b0f875",
+                  "fields": [
+                    {
+                      "name": "link",
+                      "expression": "`link`"
+                    },
+                    {
+                      "name": "nome_empresa",
+                      "expression": "`nome_empresa`"
+                    },
+                    {
+                      "name": "lucro_bruto",
+                      "expression": "`lucro_bruto`"
+                    },
+                    {
+                      "name": "indice_preco_lucro",
+                      "expression": "`indice_preco_lucro`"
+                    },
+                    {
+                      "name": "indice_preco_valor_patrimonial",
+                      "expression": "`indice_preco_valor_patrimonial`"
+                    },
+                    {
+                      "name": "valor_preco_ativo",
+                      "expression": "`valor_preco_ativo`"
+                    },
+                    {
+                      "name": "return_on_equity",
+                      "expression": "`return_on_equity`"
+                    },
+                    {
+                      "name": "margem_liquida",
+                      "expression": "`margem_liquida`"
+                    },
+                    {
+                      "name": "valuation",
+                      "expression": "`valuation`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "link",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "",
+                    "imageWidth": "45",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "image",
+                    "visible": true,
+                    "order": 1,
+                    "title": "#",
+                    "allowSearch": false,
+                    "alignContent": "center",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "defaultColumnWidth": 55,
+                    "displayName": "link"
+                  },
+                  {
+                    "fieldName": "nome_empresa",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 3,
+                    "title": "EMPRESA",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "cellFormat": {
+                      "default": {
+                        "foregroundColor": null
+                      },
+                      "rules": []
+                    },
+                    "description": "",
+                    "displayName": "nome_empresa"
+                  },
+                  {
+                    "fieldName": "lucro_bruto",
+                    "numberFormat": "'0,0",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "integer",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 5,
+                    "title": "LUCRO 2024",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "lucro_bruto"
+                  },
+                  {
+                    "fieldName": "indice_preco_lucro",
+                    "numberFormat": "0.00",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 6,
+                    "title": "P / L",
+                    "allowSearch": false,
+                    "alignContent": "center",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "defaultColumnWidth": 80,
+                    "displayName": "indice_preco_lucro"
+                  },
+                  {
+                    "fieldName": "indice_preco_valor_patrimonial",
+                    "numberFormat": "0.00",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 7,
+                    "title": "P / VP",
+                    "allowSearch": false,
+                    "alignContent": "center",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "description": "",
+                    "defaultColumnWidth": 80,
+                    "displayName": "indice_preco_valor_patrimonial"
+                  },
+                  {
+                    "fieldName": "valor_preco_ativo",
+                    "numberFormat": "0.00",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 8,
+                    "title": "COTAÇÃO",
+                    "allowSearch": false,
+                    "alignContent": "center",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "valor_preco_ativo"
+                  },
+                  {
+                    "fieldName": "return_on_equity",
+                    "numberFormat": "0.00%",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 9,
+                    "title": "ROE",
+                    "allowSearch": false,
+                    "alignContent": "center",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "return_on_equity"
+                  },
+                  {
+                    "fieldName": "margem_liquida",
+                    "numberFormat": "0.00%",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 10,
+                    "title": "MARGEM LIQ",
+                    "allowSearch": false,
+                    "alignContent": "center",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "margem_liquida"
+                  },
+                  {
+                    "fieldName": "valuation",
+                    "numberFormat": "0,0",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "integer",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 11,
+                    "title": "VALUATION",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "valuation"
+                  }
+                ]
+              },
+              "invisibleColumns": [
+                {
+                  "booleanValues": [
+                    "false",
+                    "true"
+                  ],
+                  "imageUrlTemplate": "{{ @ }}",
+                  "imageTitleTemplate": "{{ @ }}",
+                  "imageWidth": "",
+                  "imageHeight": "",
+                  "linkUrlTemplate": "{{ @ }}",
+                  "linkTextTemplate": "{{ @ }}",
+                  "linkTitleTemplate": "{{ @ }}",
+                  "linkOpenInNewTab": true,
+                  "name": "sigla_ativo",
+                  "type": "string",
+                  "displayAs": "string",
+                  "order": 0,
+                  "title": "sigla_ativo",
+                  "allowSearch": false,
+                  "alignContent": "left",
+                  "allowHTML": false,
+                  "highlightLinks": false,
+                  "useMonospaceFont": false,
+                  "preserveWhitespace": false
+                },
+                {
+                  "booleanValues": [
+                    "false",
+                    "true"
+                  ],
+                  "imageUrlTemplate": "{{ @ }}",
+                  "imageTitleTemplate": "{{ @ }}",
+                  "imageWidth": "",
+                  "imageHeight": "",
+                  "linkUrlTemplate": "{{ @ }}",
+                  "linkTextTemplate": "{{ @ }}",
+                  "linkTitleTemplate": "{{ @ }}",
+                  "linkOpenInNewTab": true,
+                  "name": "logo_empresa",
+                  "type": "string",
+                  "displayAs": "string",
+                  "order": 2,
+                  "title": "logo_empresa",
+                  "allowSearch": false,
+                  "alignContent": "left",
+                  "allowHTML": false,
+                  "highlightLinks": false,
+                  "useMonospaceFont": false,
+                  "preserveWhitespace": false
+                },
+                {
+                  "numberFormat": "0",
+                  "booleanValues": [
+                    "false",
+                    "true"
+                  ],
+                  "imageUrlTemplate": "{{ @ }}",
+                  "imageTitleTemplate": "{{ @ }}",
+                  "imageWidth": "",
+                  "imageHeight": "",
+                  "linkUrlTemplate": "{{ @ }}",
+                  "linkTextTemplate": "{{ @ }}",
+                  "linkTitleTemplate": "{{ @ }}",
+                  "linkOpenInNewTab": true,
+                  "name": "receita_bruta",
+                  "type": "integer",
+                  "displayAs": "number",
+                  "order": 4,
+                  "title": "receita_bruta",
+                  "allowSearch": false,
+                  "alignContent": "right",
+                  "allowHTML": false,
+                  "highlightLinks": false,
+                  "useMonospaceFont": false,
+                  "preserveWhitespace": false
+                },
+                {
+                  "numberFormat": "0.00",
+                  "booleanValues": [
+                    "false",
+                    "true"
+                  ],
+                  "imageUrlTemplate": "{{ @ }}",
+                  "imageTitleTemplate": "{{ @ }}",
+                  "imageWidth": "",
+                  "imageHeight": "",
+                  "linkUrlTemplate": "{{ @ }}",
+                  "linkTextTemplate": "{{ @ }}",
+                  "linkTitleTemplate": "{{ @ }}",
+                  "linkOpenInNewTab": true,
+                  "name": "indice_divida_patrimonio",
+                  "type": "float",
+                  "displayAs": "number",
+                  "order": 12,
+                  "title": "indice_divida_patrimonio",
+                  "allowSearch": false,
+                  "alignContent": "right",
+                  "allowHTML": false,
+                  "highlightLinks": false,
+                  "useMonospaceFont": false,
+                  "preserveWhitespace": false
+                },
+                {
+                  "booleanValues": [
+                    "false",
+                    "true"
+                  ],
+                  "imageUrlTemplate": "{{ @ }}",
+                  "imageTitleTemplate": "{{ @ }}",
+                  "imageWidth": "",
+                  "imageHeight": "",
+                  "linkUrlTemplate": "{{ @ }}",
+                  "linkTextTemplate": "{{ @ }}",
+                  "linkTitleTemplate": "{{ @ }}",
+                  "linkOpenInNewTab": true,
+                  "name": "setor",
+                  "type": "string",
+                  "displayAs": "string",
+                  "order": 13,
+                  "title": "setor",
+                  "allowSearch": false,
+                  "alignContent": "left",
+                  "allowHTML": false,
+                  "highlightLinks": false,
+                  "useMonospaceFont": false,
+                  "preserveWhitespace": false
+                },
+                {
+                  "booleanValues": [
+                    "false",
+                    "true"
+                  ],
+                  "imageUrlTemplate": "{{ @ }}",
+                  "imageTitleTemplate": "{{ @ }}",
+                  "imageWidth": "",
+                  "imageHeight": "",
+                  "linkUrlTemplate": "{{ @ }}",
+                  "linkTextTemplate": "{{ @ }}",
+                  "linkTitleTemplate": "{{ @ }}",
+                  "linkOpenInNewTab": true,
+                  "name": "subsetor",
+                  "type": "string",
+                  "displayAs": "string",
+                  "order": 14,
+                  "title": "subsetor",
+                  "allowSearch": false,
+                  "alignContent": "left",
+                  "allowHTML": false,
+                  "highlightLinks": false,
+                  "useMonospaceFont": false,
+                  "preserveWhitespace": false
+                },
+                {
+                  "booleanValues": [
+                    "false",
+                    "true"
+                  ],
+                  "imageUrlTemplate": "{{ @ }}",
+                  "imageTitleTemplate": "{{ @ }}",
+                  "imageWidth": "",
+                  "imageHeight": "",
+                  "linkUrlTemplate": "{{ @ }}",
+                  "linkTextTemplate": "{{ @ }}",
+                  "linkTitleTemplate": "{{ @ }}",
+                  "linkOpenInNewTab": true,
+                  "name": "segmento",
+                  "type": "string",
+                  "displayAs": "string",
+                  "order": 15,
+                  "title": "segmento",
+                  "allowSearch": false,
+                  "alignContent": "left",
+                  "allowHTML": false,
+                  "highlightLinks": false,
+                  "useMonospaceFont": false,
+                  "preserveWhitespace": false
+                }
+              ],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 25,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": false
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 3,
+            "width": 5,
+            "height": 11
+          }
+        },
+        {
+          "widget": {
+            "name": "25c059c1",
+            "queries": [
+              {
+                "name": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f081235bd9151f878c9faa5915f3e3_setor",
+                "query": {
+                  "datasetName": "84b0f875",
+                  "fields": [
+                    {
+                      "name": "setor",
+                      "expression": "`setor`"
+                    },
+                    {
+                      "name": "setor_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "setor",
+                    "displayName": "setor",
+                    "queryName": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f081235bd9151f878c9faa5915f3e3_setor"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 2,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "60596fb5",
+            "queries": [
+              {
+                "name": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f081235bd9151f878c9faa5915f3e3_subsetor",
+                "query": {
+                  "datasetName": "84b0f875",
+                  "fields": [
+                    {
+                      "name": "subsetor",
+                      "expression": "`subsetor`"
+                    },
+                    {
+                      "name": "subsetor_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "subsetor",
+                    "displayName": "subsetor",
+                    "queryName": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f081235bd9151f878c9faa5915f3e3_subsetor"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "587d2c18",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## EMPRESAS B3"
+              ]
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 2,
+            "width": 1,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "3474437b",
+      "displayName": "Macro Economia",
+      "layout": [
+        {
+          "widget": {
+            "name": "6c2d0d37",
+            "multilineTextboxSpec": {
+              "lines": [
+                "\n",
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_head2_w.png)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "b5753aa6",
+            "multilineTextboxSpec": {
+              "lines": [
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_lateral2_w.png)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 1,
+            "height": 12
+          }
+        },
+        {
+          "widget": {
+            "name": "a250f872",
+            "multilineTextboxSpec": {
+              "lines": [
+                "Copyright (c) Databricks, 2025.\n"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "2e3200b3",
+            "queries": [
+              {
+                "name": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f081235b8612ff97dd5e71a7ae87f1_ano",
+                "query": {
+                  "datasetName": "6a054a5c",
+                  "fields": [
+                    {
+                      "name": "ano",
+                      "expression": "`ano`"
+                    },
+                    {
+                      "name": "ano_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "ano",
+                    "displayName": "ano",
+                    "queryName": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f081235b8612ff97dd5e71a7ae87f1_ano"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "4cb36f3a",
+            "multilineTextboxSpec": {
+              "lines": [
+                "### HISTÓRICO DIÁRIO DA COTAÇÃO DO DÓLAR"
+              ]
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 2,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "f4289c7a",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "6a054a5c",
+                  "fields": [
+                    {
+                      "name": "sum(val_dolar_abertura)",
+                      "expression": "SUM(`val_dolar_abertura`)"
+                    },
+                    {
+                      "name": "daily(data)",
+                      "expression": "DATE_TRUNC(\"DAY\", `data`)"
+                    },
+                    {
+                      "name": "sum(val_dolar_fechamento)",
+                      "expression": "SUM(`val_dolar_fechamento`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "daily(data)",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "data"
+                },
+                "y": {
+                  "fieldName": "sum(val_dolar_fechamento)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "Valor Fechamento"
+                },
+                "label": {
+                  "show": false
+                },
+                "extra": [
+                  {
+                    "fieldName": "sum(val_dolar_abertura)",
+                    "displayName": "Valor Abertura"
+                  }
+                ]
+              },
+              "frame": {
+                "showDescription": false
+              },
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 3,
+            "width": 5,
+            "height": 11
+          }
+        },
+        {
+          "widget": {
+            "name": "4c5fa17c",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "69ca7770",
+                  "fields": [
+                    {
+                      "name": "data",
+                      "expression": "`data`"
+                    },
+                    {
+                      "name": "noticia_acontecimento_dolar",
+                      "expression": "`noticia_acontecimento_dolar`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "data",
+                    "dateTimeFormat": "DD/MM/YYYY",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "date",
+                    "displayAs": "datetime",
+                    "visible": true,
+                    "order": 100000,
+                    "title": "data",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "data"
+                  },
+                  {
+                    "fieldName": "noticia_acontecimento_dolar",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100001,
+                    "title": "noticia_acontecimento_dolar",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false,
+                    "displayName": "noticia_acontecimento_dolar"
+                  }
+                ]
+              },
+              "invisibleColumns": [],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 25,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": false
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 16,
+            "width": 6,
+            "height": 4
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "32d778a1",
+      "displayName": "Forecasting",
+      "layout": [
+        {
+          "widget": {
+            "name": "e760f8d8",
+            "multilineTextboxSpec": {
+              "lines": [
+                "\n",
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_head2_w.png)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "6f7b00f6",
+            "multilineTextboxSpec": {
+              "lines": [
+                "![image](https://raw.githubusercontent.com/Databricks-BR/wtsp_2025/refs/heads/main/images/wt_dash_lateral3_w.png)"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 1,
+            "height": 12
+          }
+        },
+        {
+          "widget": {
+            "name": "d3df85e6",
+            "multilineTextboxSpec": {
+              "lines": [
+                "Copyright (c) Databricks, 2025."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "bc74a3ff",
+            "queries": [
+              {
+                "name": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f081235b8612ff97dd5e71a7ae87f1_ano",
+                "query": {
+                  "datasetName": "6a054a5c",
+                  "fields": [
+                    {
+                      "name": "ano",
+                      "expression": "`ano`"
+                    },
+                    {
+                      "name": "ano_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "ano",
+                    "displayName": "ano",
+                    "queryName": "dashboards/01f07fc52716194e8bffc8e5cfb26a9e/datasets/01f081235b8612ff97dd5e71a7ae87f1_ano"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "b2368d38",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "42b4e325",
+                  "fields": [
+                    {
+                      "name": "data",
+                      "expression": "`data`"
+                    },
+                    {
+                      "name": "val_dolar_fechamento",
+                      "expression": "`val_dolar_fechamento`"
+                    },
+                    {
+                      "name": "val_dolar_fechamento_forecast",
+                      "expression": "`val_dolar_fechamento_forecast`"
+                    },
+                    {
+                      "name": "val_dolar_fechamento_upper",
+                      "expression": "`val_dolar_fechamento_upper`"
+                    },
+                    {
+                      "name": "val_dolar_fechamento_lower",
+                      "expression": "`val_dolar_fechamento_lower`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "forecast-line",
+              "encodings": {
+                "x": {
+                  "fieldName": "data",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "format": {
+                    "type": "date",
+                    "date": "locale-short-month"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "data"
+                },
+                "y": {
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "original": {
+                    "fieldName": "val_dolar_fechamento",
+                    "displayName": "Valor Fechamento"
+                  },
+                  "prediction": {
+                    "fieldName": "val_dolar_fechamento_forecast",
+                    "displayName": "Valor Projetado"
+                  },
+                  "predictionUpper": {
+                    "fieldName": "val_dolar_fechamento_upper",
+                    "displayName": "MAX Valor Projetado"
+                  },
+                  "predictionLower": {
+                    "fieldName": "val_dolar_fechamento_lower",
+                    "displayName": "MIN Valor Projetado"
+                  },
+                  "axis": {
+                    "hideLabels": false,
+                    "hideTitle": true
+                  }
+                }
+              },
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 4
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 6
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 7
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 8
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 9
+                  },
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 10
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 3,
+            "width": 5,
+            "height": 11
+          }
+        },
+        {
+          "widget": {
+            "name": "cc367e31",
+            "multilineTextboxSpec": {
+              "lines": [
+                "### PROJEÇÃO DA COTAÇÃO DO DÓLAR"
+              ]
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 2,
+            "width": 3,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#FAFAFB",
+        "dark": "#1F272D"
+      },
+      "widgetBackgroundColor": {
+        "light": "#FFFFFF",
+        "dark": "#1B3139"
+      },
+      "fontColor": {
+        "light": "#11171C",
+        "dark": "#E8ECF0"
+      },
+      "selectionColor": {
+        "light": "#2272B4",
+        "dark": "#8ACAFF"
+      },
+      "widgetHeaderAlignment": "LEFT"
+    }
+  }
+}
